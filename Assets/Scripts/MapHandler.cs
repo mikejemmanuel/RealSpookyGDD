@@ -43,10 +43,11 @@ public class MapHandler : MonoBehaviour
 
         //Loop to fill the tileOccupancy 2D array with values from the inspector
         //All values (objects) from the inspector are put in their grid position
+        tileOccupancy = new GameObject[roomSize,roomSize];
         for (int i = 0; i < roomStarterObjects.Length; i++){
             int column = (int)starterObjectPositions[i].x;
             int row = (int)starterObjectPositions[i].y;
-            tileOccupancy[column, row] = roomStarterObjects[i];
+            tileOccupancy[column - 1, row - 1] = roomStarterObjects[i];
             roomStarterObjects[i].transform.position = GetTileCenter(column, row);
         }
     }
@@ -59,7 +60,7 @@ public class MapHandler : MonoBehaviour
 
     //Input a column and row to get the GameObject that is on that tile (1, 1 is the bottom)
     public GameObject GetTileObject(int column, int row) {
-        return tileOccupancy[column, row];
+        return tileOccupancy[column - 1, row - 1];
     }
     //Input a columns and row to get the center position of that tile (1, 1 is the bottom)
     public Vector2 GetTileCenter(int column, int row) {
@@ -76,32 +77,32 @@ public class MapHandler : MonoBehaviour
         if (direction == "up") {
             if (((row + 1) <= 5) & (GetTileCenter(column, row + 1) == null)){
                 objectToMove.transform.position = GetTileCenter(column, row + 1);
-                tileOccupancy[column, row] = null;
-                tileOccupancy[column, row + 1] = objectToMove;
+                tileOccupancy[column - 1, row - 1] = null;
+                tileOccupancy[column - 1, row] = objectToMove;
             } else {
                 Debug.Log("NO MORE SPACE UPWARDS");
             }
         } else if (direction == "down") {
             if (((row - 1) >= 1) & (GetTileCenter(column, row - 1) == null)){
                 objectToMove.transform.position = GetTileCenter(column, row - 1);
-                tileOccupancy[column, row] = null;
-                tileOccupancy[column, row - 1] = objectToMove;
+                tileOccupancy[column - 1, row - 1] = null;
+                tileOccupancy[column - 1, row - 2] = objectToMove;
             } else {
                 Debug.Log("NO MORE SPACE DOWNWARDS");
             }
         } else if (direction == "left") {
             if (((column - 1) >= 1) & (GetTileCenter(column - 1, row) == null)){
                 objectToMove.transform.position = GetTileCenter(column - 1, row);
-                tileOccupancy[column, row] = null;
-                tileOccupancy[column - 1, row] = objectToMove;
+                tileOccupancy[column - 1, row - 1] = null;
+                tileOccupancy[column - 2, row - 1] = objectToMove;
             } else {
                 Debug.Log("NO MORE SPACE LEFTWARDS");
             }
         } else if (direction == "right") {
             if (((column + 1) <= 5) & (GetTileCenter(column + 1, row) == null)){
                 objectToMove.transform.position = GetTileCenter(column + 1, row);
-                tileOccupancy[column, row] = null;
-                tileOccupancy[column + 1, row] = objectToMove;
+                tileOccupancy[column - 1, row - 1] = null;
+                tileOccupancy[column, row - 1] = objectToMove;
             } else {
                 Debug.Log("NO MORE SPACE RIGHTWARDS");
             }
