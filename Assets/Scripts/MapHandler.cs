@@ -4,10 +4,27 @@ using UnityEngine;
 
 public class MapHandler : MonoBehaviour
 {   
+    /*
+    The intention for this script is to be put on a GameObject representing a room
+    For example, the Kitchen and Bedroom would be GameObjects and have this script
+    This script will keep all of their necesarry information whil also giving 
+        functions to change their information
+    Using the inspector's serialized values for this script, it will handle placing
+        all starting objects
+    Please have one of each item in the hierachy so they can be used in the serialized 
+        fields. It is important to have the instantiated version of them.
+    */
+
     #region Tile Variables
     [SerializeField]
     [Tooltip("How many tiles will be in one row?")]
     private int roomSize;
+    [SerializeField]
+    [Tooltip("Items that will need to be in this room on start.")]
+    private GameObject[] roomStarterObjects;
+    [SerializeField]
+    [Tooltip("1 to 1 column and row of each starter object.")]
+    private Vector2[] starterObjectPositions;
     private GameObject[,] tileOccupancy;
     #endregion
 
@@ -16,14 +33,22 @@ public class MapHandler : MonoBehaviour
     private int screenYBound;
     #endregion
 
-    public GameObject myObject;
-
     // Start is called before the first frame update
     void Start()
     {
-        tileOccupancy = new GameObject[roomSize,roomSize];
+        //tileOccupancy = new GameObject[roomSize,roomSize];
+        //Hard Coded Bounds for Vector2 usage
         screenXBound = 10;
         screenYBound = 5;
+
+        //Loop to fill the tileOccupancy 2D array with values from the inspector
+        //All values (objects) from the inspector are put in their grid position
+        for (int i = 0; i < roomStarterObjects.Length; i++){
+            int column = (int)starterObjectPositions[i].x;
+            int row = (int)starterObjectPositions[i].y;
+            tileOccupancy[column, row] = roomStarterObjects[i];
+            roomStarterObjects[i].transform.position = GetTileCenter(column, row);
+        }
     }
 
     // Update is called once per frame
@@ -33,15 +58,53 @@ public class MapHandler : MonoBehaviour
     }
 
     //Input a column and row to get the GameObject that is on that tile (1, 1 is the bottom)
-    public GameObject GetTileObject(int colummn, int row) {
-        return tileOccupancy[colummn, row];
+    public GameObject GetTileObject(int column, int row) {
+        return tileOccupancy[column, row];
     }
     //Input a columns and row to get the center position of that tile (1, 1 is the bottom)
-    public Vector2 GetTileCenter(int colummn, int row) {
+    public Vector2 GetTileCenter(int column, int row) {
         int tileWidth = screenXBound * 2 / roomSize;
         int tileHeight = screenYBound  * 2 / roomSize;
-        int xPos = (tileWidth * colummn) - (tileWidth / 2) - screenXBound;
+        int xPos = (tileWidth * column) - (tileWidth / 2) - screenXBound;
         int yPos = (tileHeight * row) - (tileHeight / 2) - screenYBound;
         return new Vector2(xPos, yPos);
+    }
+    //Give column and row of tile to move its object in direction 
+    //tileOccupancy is updated as a move occurs
+    public void moveObejct(int column, int row, string direction) {
+        GameObject objectToMove = GetTileObject(column, row);
+        if (direction == "up") {
+            if (((row + 1) <= 5) & (GetTileCenter(column, row + 1) == null)){
+                objectToMove.transform.position = GetTileCenter(column, row + 1);
+                tileOccupancy[column, row] = null;
+                tileOccupancy[column, row + 1] = objectToMove;
+            } else {
+                Debug.Log("NO MORE SPACE UPWARDS");
+            }
+        } else if (direction == "down") {
+            if (((row - 1) >= 1) & (GetTileCenter(column, row - 1) == null)){
+                objectToMove.transform.position = GetTileCenter(column, row - 1);
+                tileOccupancy[column, row] = null;
+                tileOccupancy[column, row - 1] = objectToMove;
+            } else {
+                Debug.Log("NO MORE SPACE DOWNWARDS");
+            }
+        } else if (direction == "left") {
+            if (((column - 1) >= 1) & (GetTileCenter(column - 1, row) == null)){
+                objectToMove.transform.position = GetTileCenter(column - 1, row);
+                tileOccupancy[column, row] = null;
+                tileOccupancy[column - 1, row] = objectToMove;
+            } else {
+                Debug.Log("NO MORE SPACE LEFTWARDS");
+            }
+        } else if (direction == "right") {
+            if (((column + 1) <= 5) & (GetTileCenter(column + 1, row) == null)){
+                objectToMove.transform.position = GetTileCenter(column + 1, row);
+                tileOccupancy[column, row] = null;
+                tileOccupancy[column + 1, row] = objectToMove;
+            } else {
+                Debug.Log("NO MORE SPACE RIGHTWARDS");
+            }
+        }
     }
 }
