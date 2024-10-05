@@ -91,40 +91,53 @@ public class MapHandler : MonoBehaviour
     }
     //Give column and row of tile to move its object in direction 
     //tileOccupancy is updated as a move occurs
-    public void moveObejct(int column, int row, string direction) {
+    public bool moveObejct(int column, int row, string direction) {
         GameObject objectToMove = GetTileObject(column, row);
         if (direction == "up") {
-            if (((row + 1) <= 5) & (GetTileCenter(column, row + 1) == null)){
+            if ((row + 1) > 5) {
+                Debug.Log("OUT OF BOUNDS");
+            } else if (GetTileObject(column, row + 1) == null){
                 objectToMove.transform.position = GetTileCenter(column, row + 1);
                 tileOccupancy[column - 1, row - 1] = null;
                 tileOccupancy[column - 1, row] = objectToMove;
+                return true;
             } else {
                 Debug.Log("NO MORE SPACE UPWARDS");
             }
         } else if (direction == "down") {
-            if (((row - 1) >= 1) & (GetTileCenter(column, row - 1) == null)){
+            if ((row - 1) < 1) {
+                Debug.Log("OUT OF BOUNDS");
+            } else if (GetTileObject(column, row - 1) == null){
                 objectToMove.transform.position = GetTileCenter(column, row - 1);
                 tileOccupancy[column - 1, row - 1] = null;
                 tileOccupancy[column - 1, row - 2] = objectToMove;
+                return true;
             } else {
                 Debug.Log("NO MORE SPACE DOWNWARDS");
             }
         } else if (direction == "left") {
-            if (((column - 1) >= 1) & (GetTileCenter(column - 1, row) == null)){
+            if ((column - 1) < 1) {
+                Debug.Log("OUT OF BOUNDS");
+            } else if (GetTileObject(column - 1, row) == null){
                 objectToMove.transform.position = GetTileCenter(column - 1, row);
                 tileOccupancy[column - 1, row - 1] = null;
                 tileOccupancy[column - 2, row - 1] = objectToMove;
+                return true;
             } else {
                 Debug.Log("NO MORE SPACE LEFTWARDS");
             }
         } else if (direction == "right") {
-            if (((column + 1) <= 5) & (GetTileCenter(column + 1, row) == null)){
+            if ((column + 1) > 5) {
+                Debug.Log("OUT OF BOUNDS");
+            } else if (GetTileObject(column + 1, row) == null){
                 objectToMove.transform.position = GetTileCenter(column + 1, row);
                 tileOccupancy[column - 1, row - 1] = null;
                 tileOccupancy[column, row - 1] = objectToMove;
+                return true;
             } else {
                 Debug.Log("NO MORE SPACE RIGHTWARDS");
             }
         }
+        return false;
     }
 }
