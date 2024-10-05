@@ -41,8 +41,13 @@ public class GhostController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.L)) {
+            Debug.Log("Col " + myColumn);
+            Debug.Log("Row " + myRow);
+        }
         if (canPossessTile()) {
             if(Input.GetKeyDown(KeyCode.J)) {
+                Debug.Log("Possessing");
                 isPossessing = true;
                 float colorR = this.GetComponent<SpriteRenderer>().color.r;
                 float colorG = this.GetComponent<SpriteRenderer>().color.g;
@@ -55,6 +60,7 @@ public class GhostController : MonoBehaviour
             }
         }
         if (Input.GetKeyDown(KeyCode.K)) {
+            Debug.Log("De-Possessing")
             isPossessing = false;
             float colorR = this.GetComponent<SpriteRenderer>().color.r;
             float colorG = this.GetComponent<SpriteRenderer>().color.g;
@@ -77,6 +83,8 @@ public class GhostController : MonoBehaviour
                     } else {
                         Debug.Log("NO MORE SPACE RIGHTWARDS");
                     }
+                } else if ((myRoom.GetComponent<MapHandler>().GetTileObject(myColumn + 1, myRow) != null) && (myRoom.GetComponent<MapHandler>().GetTileObject(myColumn + 1, myRow).CompareTag("Impassable"))) {
+                    Debug.Log("GHOST CANT STAND THERE");
                 } else {
                     myColumn += 1;
                     this.transform.position = myRoom.GetComponent<MapHandler>().GetTileCenter(myColumn, myRow);
@@ -92,6 +100,8 @@ public class GhostController : MonoBehaviour
                     } else {
                         Debug.Log("NO MORE SPACE LEFTWARDS");
                     }
+                } else if ((myRoom.GetComponent<MapHandler>().GetTileObject(myColumn - 1, myRow) != null) && (myRoom.GetComponent<MapHandler>().GetTileObject(myColumn - 1, myRow).CompareTag("Impassable"))) {
+                    Debug.Log("GHOST CANT STAND THERE");
                 } else {
                     myColumn -= 1;
                     this.transform.position = myRoom.GetComponent<MapHandler>().GetTileCenter(myColumn, myRow);
@@ -107,6 +117,8 @@ public class GhostController : MonoBehaviour
                     } else {
                         Debug.Log("NO MORE SPACE UPWARDS");
                     }
+                } else if ((myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow + 1) != null) && (myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow + 1).CompareTag("Impassable"))) {
+                    Debug.Log("GHOST CANT STAND THERE");
                 } else {
                     myRow += 1;
                     this.transform.position = myRoom.GetComponent<MapHandler>().GetTileCenter(myColumn, myRow);
@@ -122,6 +134,8 @@ public class GhostController : MonoBehaviour
                     } else {
                         Debug.Log("NO MORE SPACE UPWARDS");
                     }
+                } else if ((myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow - 1) != null) && (myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow - 1).CompareTag("Impassable"))) {
+                    Debug.Log("GHOST CANT STAND THERE");
                 } else {
                     myRow -= 1;
                     this.transform.position = myRoom.GetComponent<MapHandler>().GetTileCenter(myColumn, myRow);
