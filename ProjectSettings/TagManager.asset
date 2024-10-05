@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Possessable
   layers:
   - Default
   - TransparentFX
@@ -43,4 +44,7 @@ TagManager:
     locked: 0
   - name: Aboveground
     uniqueID: 381771425
+    locked: 0
+  - name: Top Layer
+    uniqueID: 2577104535
     locked: 0

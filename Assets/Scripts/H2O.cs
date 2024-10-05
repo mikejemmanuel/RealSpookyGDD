@@ -10,7 +10,6 @@ public class H2O : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Starting");
         rend = GetComponent<SpriteRenderer>();
         liquid = startLiquid;
         if (liquid == true)
@@ -20,7 +19,6 @@ public class H2O : MonoBehaviour
         {
             rend.sprite = Resources.Load<Sprite>("Sprites/puddle0");
         }
-        Debug.Log("Starting ended");
     }
 
     // Update is called once per frame
