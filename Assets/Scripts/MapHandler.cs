@@ -40,6 +40,8 @@ public class MapHandler : MonoBehaviour
         //Hard Coded Bounds for Vector2 usage
         screenXBound = 10;
         screenYBound = 5;
+        //screenXBound = 20;
+        //screenYBound = 10;
 
         //Loop to fill the tileOccupancy 2D array with values from the inspector
         //All values (objects) from the inspector are put in their grid position
@@ -64,9 +66,9 @@ public class MapHandler : MonoBehaviour
     }
     //Input a columns and row to get the center position of that tile (1, 1 is the bottom)
     public Vector2 GetTileCenter(int column, int row) {
-        int tileWidth = screenXBound * 2 / roomSize;
+        int tileWidth = screenXBound / roomSize;
         int tileHeight = screenYBound  * 2 / roomSize;
-        int xPos = (tileWidth * column) - (tileWidth / 2) - screenXBound;
+        int xPos = (tileWidth * column) - (tileWidth / 2) - (screenXBound / 2);
         int yPos = (tileHeight * row) - (tileHeight / 2) - screenYBound;
         return new Vector2(xPos, yPos);
     }
