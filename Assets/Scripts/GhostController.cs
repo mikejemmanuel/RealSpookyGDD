@@ -6,11 +6,13 @@ public class GhostController : MonoBehaviour
 {
     #region Position Variables
     [SerializeField]
-    [Tooltip("PUT THE EXACT COLUMN YOU PUT IN THE ROOM OBJECT")]
+    [Tooltip("Intended Start Column")]
     private int myColumn;
     [SerializeField]
-    [Tooltip("PUT THE EXACT COLUMN YOU PUT IN THE ROOM OBJECT")]
+    [Tooltip("Intended Start Row")]
     private int myRow;
+    private int lastColumn;
+    private int lastRow;
     [SerializeField]
     [Tooltip("Put the Bedroom GameObject Here")]
     private GameObject myRoom;
@@ -20,41 +22,129 @@ public class GhostController : MonoBehaviour
     private float moveCooldown;
     #endregion
 
+    #region Possession Variables
+    private bool isPossessing;
+    #endregion
+
     // Start is called before the first frame update
     void Start()
     {
+        float colorR = this.GetComponent<SpriteRenderer>().color.r;
+        float colorG = this.GetComponent<SpriteRenderer>().color.g;
+        float colorB = this.GetComponent<SpriteRenderer>().color.b;
+        this.GetComponent<SpriteRenderer>().color = new Color(colorR, colorG, colorB, 0.5f);
+        this.transform.position = myRoom.GetComponent<MapHandler>().GetTileCenter(myColumn, myRow);
         moveCooldown = .1f;
+        isPossessing = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (canPossessTile()) {
+            if(Input.GetKeyDown(KeyCode.J)) {
+                isPossessing = true;
+                float colorR = this.GetComponent<SpriteRenderer>().color.r;
+                float colorG = this.GetComponent<SpriteRenderer>().color.g;
+                float colorB = this.GetComponent<SpriteRenderer>().color.b;
+                this.GetComponent<SpriteRenderer>().color = new Color(colorR, colorG, colorB, 0.0f);
+                colorR = myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow).GetComponent<SpriteRenderer>().color.r;
+                colorG = myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow).GetComponent<SpriteRenderer>().color.g;
+                colorB = myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow).GetComponent<SpriteRenderer>().color.b;
+                myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow).GetComponent<SpriteRenderer>().color = new Color(colorR - 100, colorG - 100, colorB);
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.K)) {
+            isPossessing = false;
+            float colorR = this.GetComponent<SpriteRenderer>().color.r;
+            float colorG = this.GetComponent<SpriteRenderer>().color.g;
+            float colorB = this.GetComponent<SpriteRenderer>().color.b;
+            this.GetComponent<SpriteRenderer>().color = new Color(colorR, colorG, colorB, 0.5f);
+            colorR = myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow).GetComponent<SpriteRenderer>().color.r;
+            colorG = myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow).GetComponent<SpriteRenderer>().color.g;
+            colorB = myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow).GetComponent<SpriteRenderer>().color.b;
+            myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow).GetComponent<SpriteRenderer>().color = new Color(colorR + 100, colorG + 100, colorB);
+        }
         if (moveCooldown <= 0) {
             if(Input.GetAxis("Horizontal") > 0) {
-                if (myRoom.GetComponent<MapHandler>().moveObejct(myColumn, myRow, "right")) {
+                if ((myColumn + 1) > 5) {
+                    Debug.Log("OUT OF BOUNDS");
+                } else if (isPossessing) {
+                    if (myRoom.GetComponent<MapHandler>().GetTileObject(myColumn + 1, myRow) == null) {
+                        myRoom.GetComponent<MapHandler>().moveObejct(myColumn, myRow, "right");
+                        myColumn += 1;    
+                        this.transform.position = myRoom.GetComponent<MapHandler>().GetTileCenter(myColumn, myRow);
+                    } else {
+                        Debug.Log("NO MORE SPACE RIGHTWARDS");
+                    }
+                } else {
                     myColumn += 1;
+                    this.transform.position = myRoom.GetComponent<MapHandler>().GetTileCenter(myColumn, myRow);
                 }
             } else if(Input.GetAxis("Horizontal") < 0) {
-                if(myRoom.GetComponent<MapHandler>().moveObejct(myColumn, myRow, "left")){
+                if ((myColumn - 1) < 1) {
+                    Debug.Log("OUT OF BOUNDS");
+                } else if (isPossessing) {
+                    if (myRoom.GetComponent<MapHandler>().GetTileObject(myColumn - 1, myRow) == null) {
+                        myRoom.GetComponent<MapHandler>().moveObejct(myColumn, myRow, "left");
+                        myColumn -= 1;    
+                        this.transform.position = myRoom.GetComponent<MapHandler>().GetTileCenter(myColumn, myRow);
+                    } else {
+                        Debug.Log("NO MORE SPACE LEFTWARDS");
+                    }
+                } else {
                     myColumn -= 1;
+                    this.transform.position = myRoom.GetComponent<MapHandler>().GetTileCenter(myColumn, myRow);
                 }
             } else if(Input.GetAxis("Vertical") > 0) {
-                if(myRoom.GetComponent<MapHandler>().moveObejct(myColumn, myRow, "up")){
+                if ((myRow + 1) > 5) {
+                    Debug.Log("OUT OF BOUNDS");
+                } else if (isPossessing) {
+                    if (myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow + 1) == null) {
+                        myRoom.GetComponent<MapHandler>().moveObejct(myColumn, myRow, "up");
+                        myRow += 1;    
+                        this.transform.position = myRoom.GetComponent<MapHandler>().GetTileCenter(myColumn, myRow);
+                    } else {
+                        Debug.Log("NO MORE SPACE UPWARDS");
+                    }
+                } else {
                     myRow += 1;
+                    this.transform.position = myRoom.GetComponent<MapHandler>().GetTileCenter(myColumn, myRow);
                 }
             } else if(Input.GetAxis("Vertical") < 0) {
-                if(myRoom.GetComponent<MapHandler>().moveObejct(myColumn, myRow, "down")){
+                if ((myRow - 1) < 1) {
+                    Debug.Log("OUT OF BOUNDS");
+                } else if (isPossessing) {
+                    if (myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow - 1) == null) {
+                        myRoom.GetComponent<MapHandler>().moveObejct(myColumn, myRow, "down");
+                        myRow -= 1;    
+                        this.transform.position = myRoom.GetComponent<MapHandler>().GetTileCenter(myColumn, myRow);
+                    } else {
+                        Debug.Log("NO MORE SPACE UPWARDS");
+                    }
+                } else {
                     myRow -= 1;
+                    this.transform.position = myRoom.GetComponent<MapHandler>().GetTileCenter(myColumn, myRow);
                 }
             }
             moveCooldown = .1f;
         } else {
             moveCooldown -= Time.deltaTime;
-        }
-         
+        }         
     }
 
     public void changeRoom() {
 
     }
+
+    #region Possession Functions
+    private bool canPossessTile() {
+        if(myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow) != null) {
+            if (myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow).CompareTag("Possessable")) {
+                return true;
+            }
+        }
+        return false;
+    }
+    #endregion
 }
