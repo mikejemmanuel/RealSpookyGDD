@@ -60,7 +60,7 @@ public class GhostController : MonoBehaviour
             }
         }
         if (Input.GetKeyDown(KeyCode.K)) {
-            Debug.Log("De-Possessing")
+            Debug.Log("De-Possessing");
             isPossessing = false;
             float colorR = this.GetComponent<SpriteRenderer>().color.r;
             float colorG = this.GetComponent<SpriteRenderer>().color.g;
