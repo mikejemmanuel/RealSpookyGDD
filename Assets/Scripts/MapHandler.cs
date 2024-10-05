@@ -31,6 +31,9 @@ public class MapHandler : MonoBehaviour
     #region Map Variables 
     private int screenXBound;
     private int screenYBound;
+    [SerializeField]
+    [Tooltip("Kitchen, Bedroom, Bathroom, or LivingRoom EXACTLY")]
+    private string roomName;
     #endregion
 
     // Start is called before the first frame update
@@ -38,8 +41,8 @@ public class MapHandler : MonoBehaviour
     {
         //tileOccupancy = new GameObject[roomSize,roomSize];
         //Hard Coded Bounds for Vector2 usage
-        screenXBound = 10;
-        screenYBound = 5;
+        screenXBound = 20;
+        screenYBound = 10;
 
         //Loop to fill the tileOccupancy 2D array with values from the inspector
         //All values (objects) from the inspector are put in their grid position
@@ -64,11 +67,27 @@ public class MapHandler : MonoBehaviour
     }
     //Input a columns and row to get the center position of that tile (1, 1 is the bottom)
     public Vector2 GetTileCenter(int column, int row) {
-        int tileWidth = screenXBound * 2 / roomSize;
-        int tileHeight = screenYBound  * 2 / roomSize;
-        int xPos = (tileWidth * column) - (tileWidth / 2) - screenXBound;
-        int yPos = (tileHeight * row) - (tileHeight / 2) - screenYBound;
-        return new Vector2(xPos, yPos);
+        int tileWidth = screenXBound / 2 / roomSize;
+        int tileHeight = screenYBound / roomSize;
+        int xPos = (tileWidth * column) - (tileWidth / 2) - (screenXBound / 4);
+        int yPos = (tileHeight * row) - (tileHeight / 2) - (screenYBound / 2);
+        
+        int xOffset = 0;
+        int yOffset = 0;
+        if (roomName == "Bedroom") {
+            xOffset = 0;
+            yOffset = 0;
+        } else if (roomName == "LivingRoom") {
+            xOffset = -10;
+            yOffset = 0;
+        } else if (roomName == "Kitchen") {
+            xOffset = -10;
+            yOffset = -10;
+        } else if (roomName == "Bathroom") {
+            xOffset = 0;
+            yOffset = -10;
+        }
+        return new Vector2(xPos + xOffset, yPos + yOffset);
     }
     //Give column and row of tile to move its object in direction 
     //tileOccupancy is updated as a move occurs
