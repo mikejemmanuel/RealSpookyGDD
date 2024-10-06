@@ -531,6 +531,7 @@ GameObject:
   - component: {fileID: 188715970}
   - component: {fileID: 188715969}
   - component: {fileID: 188715971}
+  - component: {fileID: 188715972}
   m_Layer: 0
   m_Name: Bedroom
   m_TagString: Untagged
@@ -599,9 +600,6 @@ MonoBehaviour:
   - {fileID: 1764559538}
   - {fileID: 2071073966}
   - {fileID: 827138667}
-  - {fileID: 1707695104}
-  - {fileID: 755373470}
-  - {fileID: 1054795535}
   - {fileID: 2127368065}
   starterObjectPositions:
   - {x: 1, y: 5}
@@ -615,14 +613,31 @@ MonoBehaviour:
   - {x: 5, y: 3}
   - {x: 1, y: 2}
   - {x: 2, y: 1}
-  - {x: 1, y: 1}
-  - {x: 5, y: 5}
-  - {x: 5, y: 1}
   - {x: 5, y: 4}
   roomName: Bedroom
   holes:
   - {fileID: 306562993}
   - {fileID: 1793153860}
+--- !u!114 &188715972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 188715968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77f18e3a4174f1d478a221f6d64dca03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shards:
+  - {fileID: 1707695104}
+  - {fileID: 755373470}
+  - {fileID: 1054795535}
+  shardSpawns:
+  - {x: 1, y: 1}
+  - {x: 5, y: 5}
+  - {x: 5, y: 1}
 --- !u!4 &199382796 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1873569870946201653, guid: 9f5a209bc0a074a3faa0803c92da65d9, type: 3}
@@ -4282,7 +4297,6 @@ MonoBehaviour:
   myColumn: 2
   myRow: 5
   myRoom: {fileID: 188715968}
-  wallObject: {fileID: 518095849}
 --- !u!212 &1548636540
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6185,6 +6199,8 @@ MonoBehaviour:
   myRoom: {fileID: 188715968}
   wallObjects:
   - {fileID: 518095849}
+  - {fileID: 31397523}
+  - {fileID: 1764559538}
 --- !u!4 &2140189946 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1873569870946201653, guid: 9f5a209bc0a074a3faa0803c92da65d9, type: 3}
@@ -6439,6 +6455,8 @@ MonoBehaviour:
   myRoom: {fileID: 188715968}
   wallObjects:
   - {fileID: 518095849}
+  - {fileID: 31397523}
+  - {fileID: 1764559538}
 --- !u!1001 &8461400097366324985
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6528,6 +6546,7 @@ SceneRoots:
   - {fileID: 1448340200}
   - {fileID: 179772831}
   - {fileID: 8461400097366324985}
+  - {fileID: 2127368067}
   - {fileID: 1284781324798504431}
   - {fileID: 4843534702443378695}
   - {fileID: 1548636541}
@@ -6537,6 +6556,5 @@ SceneRoots:
   - {fileID: 1139704110}
   - {fileID: 805836050}
   - {fileID: 1674887869}
-  - {fileID: 2127368067}
   - {fileID: 306562995}
   - {fileID: 1793153862}
