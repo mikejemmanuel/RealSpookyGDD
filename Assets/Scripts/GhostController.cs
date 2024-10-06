@@ -41,6 +41,13 @@ public class GhostController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if ((myColumn == 1) && (myRow == 1)) {
+            myRoom.GetComponent<ShardHandler>().delete1_1();
+        } else if ((myColumn == 5) && (myRow == 5)) {
+            myRoom.GetComponent<ShardHandler>().delete5_5();
+        } else if ((myColumn == 5) && (myRow == 1)) {
+            myRoom.GetComponent<ShardHandler>().delete5_1();
+        }
         if (Input.GetKeyDown(KeyCode.L)) {
             Debug.Log("Col " + myColumn);
             Debug.Log("Row " + myRow);
@@ -71,6 +78,22 @@ public class GhostController : MonoBehaviour
                     colorG = myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow).GetComponent<SpriteRenderer>().color.g;
                     colorB = myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow).GetComponent<SpriteRenderer>().color.b;
                     myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow).GetComponent<SpriteRenderer>().color = new Color(colorR - 100, colorG - 100, colorB);
+                }
+            } else if ((myColumn == 3) && (myRow == 5)) {
+                if (myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow) == null) {
+                       if(Input.GetKeyDown(KeyCode.J)) {
+                        myColumn = 1;
+                        myRow = 1;
+                        this.transform.position = myRoom.GetComponent<MapHandler>().GetTileCenter(myColumn, myRow);
+                       }
+                }
+            } else if ((myColumn == 1) && (myRow == 1)) {
+                if (myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow) == null) {
+                       if(Input.GetKeyDown(KeyCode.J)) {
+                        myColumn = 3;
+                        myRow = 5;
+                        this.transform.position = myRoom.GetComponent<MapHandler>().GetTileCenter(myColumn, myRow);
+                       }
                 }
             }
         }
