@@ -24,9 +24,6 @@ public class GhostController : MonoBehaviour
 
     #region Possession Variables
     private bool isPossessing;
-    [SerializeField]
-    [Tooltip("Put a top right wall object here")]
-    private GameObject wallObject;
     #endregion
 
     // Start is called before the first frame update
@@ -49,7 +46,7 @@ public class GhostController : MonoBehaviour
             Debug.Log("Row " + myRow);
         }
         if (isPossessing) {
-            if (Input.GetKeyDown(KeyCode.K) || wallObject.GetComponent<WallReactor>().needToReset()) {
+            if (Input.GetKeyDown(KeyCode.K)) {
                 Debug.Log("De-Possessing");
                 isPossessing = false;
                 float colorR = this.GetComponent<SpriteRenderer>().color.r;
@@ -172,6 +169,18 @@ public class GhostController : MonoBehaviour
             }
         }
         return false;
+    }
+    public void dePossess() {
+        Debug.Log("De-Possessing FUNCTION");
+        isPossessing = false;
+        float colorR = this.GetComponent<SpriteRenderer>().color.r;
+        float colorG = this.GetComponent<SpriteRenderer>().color.g;
+        float colorB = this.GetComponent<SpriteRenderer>().color.b;
+        this.GetComponent<SpriteRenderer>().color = new Color(colorR, colorG, colorB, 0.5f);
+        colorR = myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow).GetComponent<SpriteRenderer>().color.r;
+        colorG = myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow).GetComponent<SpriteRenderer>().color.g;
+        colorB = myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow).GetComponent<SpriteRenderer>().color.b;
+        myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow).GetComponent<SpriteRenderer>().color = new Color(colorR + 100, colorG + 100, colorB);
     }
     #endregion
 }

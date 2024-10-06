@@ -53,6 +53,7 @@ public class WallReactor : MonoBehaviour
         this.GetComponent<SpriteRenderer>().color = new Color(255, 255, 255, 1f);
         if (myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow) != null) {
             needRoomReset = true;
+            Debug.Log("RESET SIGNAL");
         }
         myRoom.GetComponent<MapHandler>().fillOccupancy(myColumn, myRow, this.gameObject);
     }

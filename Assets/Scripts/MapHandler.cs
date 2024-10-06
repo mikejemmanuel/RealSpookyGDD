@@ -37,6 +37,7 @@ public class MapHandler : MonoBehaviour
     [SerializeField]
     [Tooltip("Put the two Hole objects here")]
     private GameObject[] holes;
+    private int resetObjects;
     #endregion
 
     void Awake() 
@@ -59,6 +60,9 @@ public class MapHandler : MonoBehaviour
         //Place the holes onto the map
         holes[0].transform.position = GetTileCenter(3, 5);
         holes[1].transform.position = GetTileCenter(1, 1);
+
+        //Reset Onbject Helper
+        resetObjects = 0;
     }
 
     // Start is called before the first frame update
@@ -70,7 +74,12 @@ public class MapHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (resetObjects == 3) {
+            Debug.Log(resetObjects);
+            roomStarterObjects[0].GetComponent<ObjectReset>().resetMachine();
+            resetObjects = 0;
+            Debug.Log(resetObjects);
+        }
     }
 
     //Input a column and row to get the GameObject that is on that tile (1, 1 is the bottom)
@@ -172,5 +181,12 @@ public class MapHandler : MonoBehaviour
     public void fillOccupancy(int column, int row, GameObject fillerObject) {
         tileOccupancy[column - 1, row - 1] = fillerObject;
         return;
+    }
+
+    public void resetObjectsAppend() {
+        resetObjects += 1;
+    }
+    public int getResetObjects() {
+        return resetObjects;
     }
 }

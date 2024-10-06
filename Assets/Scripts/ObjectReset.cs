@@ -29,17 +29,20 @@ public class ObjectReset : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (wallObjects[0].GetComponent<WallReactor>().needToReset()) {
+        bool reset = false;
+        foreach(GameObject wall in wallObjects) {
+            if (wall.GetComponent<WallReactor>().needToReset()) {
+                reset = true;
+            }
+        }
+        if (reset) {
+            GameObject.Find("Ghost").GetComponent<GhostController>().dePossess();
             this.transform.position = myRoom.GetComponent<MapHandler>().GetTileCenter(ogColumn, ogRow);
             myRoom.GetComponent<MapHandler>().deleteOccupancy(currentColumn, currentRow);
             myRoom.GetComponent<MapHandler>().fillOccupancy(ogColumn, ogRow, this.gameObject);
-            if (wallObjects.Length > 1) {
-                foreach (GameObject wall in wallObjects) {
-                    wall.GetComponent<WallReactor>().resetReset(); 
-                }
-            }
             currentColumn = ogColumn;
             currentRow = ogRow;
+            myRoom.GetComponent<MapHandler>().resetObjectsAppend();
         }
     }
 
@@ -54,5 +57,11 @@ public class ObjectReset : MonoBehaviour
     }
     public void Right() {
         currentColumn += 1;
+    }
+    
+    public void resetMachine() {
+        foreach (GameObject wall in wallObjects) {
+            wall.GetComponent<WallReactor>().resetReset(); 
+        }   
     }
 }

@@ -30,13 +30,10 @@ public class PlateScript : MonoBehaviour
     {
         if (myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow) != null) {
             active = true;
-            Debug.Log("ACTIVE");
         } else if ((ghost.GetComponent<GhostController>().getColumn() == myColumn) && (ghost.GetComponent<GhostController>().getRow() == myRow)) {
             active = true;
-            Debug.Log("ACTIVE");
         } else {
             active = false;
-            Debug.Log("INACTIVE");
         }
     }
 
