@@ -34,10 +34,12 @@ public class MapHandler : MonoBehaviour
     [SerializeField]
     [Tooltip("Kitchen, Bedroom, Bathroom, or LivingRoom EXACTLY")]
     private string roomName;
+    [SerializeField]
+    [Tooltip("Put the two Hole objects here")]
+    private GameObject[] holes;
     #endregion
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake() 
     {
         //tileOccupancy = new GameObject[roomSize,roomSize];
         //Hard Coded Bounds for Vector2 usage
@@ -53,6 +55,16 @@ public class MapHandler : MonoBehaviour
             tileOccupancy[column - 1, row - 1] = roomStarterObjects[i];
             roomStarterObjects[i].transform.position = GetTileCenter(column, row);
         }
+
+        //Place the holes onto the map
+        holes[0].transform.position = GetTileCenter(3, 5);
+        holes[1].transform.position = GetTileCenter(1, 1);
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+
     }
 
     // Update is called once per frame
@@ -97,6 +109,9 @@ public class MapHandler : MonoBehaviour
             if ((row + 1) > 5) {
                 Debug.Log("OUT OF BOUNDS");
             } else if (GetTileObject(column, row + 1) == null){
+                if (objectToMove.GetComponent<ObjectReset>() != null) {
+                    objectToMove.GetComponent<ObjectReset>().Up();
+                }
                 objectToMove.transform.position = GetTileCenter(column, row + 1);
                 tileOccupancy[column - 1, row - 1] = null;
                 tileOccupancy[column - 1, row] = objectToMove;
@@ -108,6 +123,9 @@ public class MapHandler : MonoBehaviour
             if ((row - 1) < 1) {
                 Debug.Log("OUT OF BOUNDS");
             } else if (GetTileObject(column, row - 1) == null){
+                if (objectToMove.GetComponent<ObjectReset>() != null) {
+                    objectToMove.GetComponent<ObjectReset>().Down();
+                }
                 objectToMove.transform.position = GetTileCenter(column, row - 1);
                 tileOccupancy[column - 1, row - 1] = null;
                 tileOccupancy[column - 1, row - 2] = objectToMove;
@@ -119,6 +137,9 @@ public class MapHandler : MonoBehaviour
             if ((column - 1) < 1) {
                 Debug.Log("OUT OF BOUNDS");
             } else if (GetTileObject(column - 1, row) == null){
+                if (objectToMove.GetComponent<ObjectReset>() != null) {
+                    objectToMove.GetComponent<ObjectReset>().Left();
+                }
                 objectToMove.transform.position = GetTileCenter(column - 1, row);
                 tileOccupancy[column - 1, row - 1] = null;
                 tileOccupancy[column - 2, row - 1] = objectToMove;
@@ -130,6 +151,9 @@ public class MapHandler : MonoBehaviour
             if ((column + 1) > 5) {
                 Debug.Log("OUT OF BOUNDS");
             } else if (GetTileObject(column + 1, row) == null){
+                if (objectToMove.GetComponent<ObjectReset>() != null) {
+                    objectToMove.GetComponent<ObjectReset>().Right();
+                }
                 objectToMove.transform.position = GetTileCenter(column + 1, row);
                 tileOccupancy[column - 1, row - 1] = null;
                 tileOccupancy[column, row - 1] = objectToMove;
@@ -139,5 +163,14 @@ public class MapHandler : MonoBehaviour
             }
         }
         return false;
+    }
+
+    public void deleteOccupancy(int column, int row) {
+        tileOccupancy[column - 1, row - 1] = null;
+        return;
+    }
+    public void fillOccupancy(int column, int row, GameObject fillerObject) {
+        tileOccupancy[column - 1, row - 1] = fillerObject;
+        return;
     }
 }
