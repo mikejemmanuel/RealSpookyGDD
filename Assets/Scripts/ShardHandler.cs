@@ -45,4 +45,8 @@ public class ShardHandler : MonoBehaviour
         collectedShards += 1;
         }
     }
+
+    public int getShardsCollected() {
+        return collectedShards;
+    }
 }

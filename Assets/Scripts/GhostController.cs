@@ -24,6 +24,7 @@ public class GhostController : MonoBehaviour
 
     #region Possession Variables
     private bool isPossessing;
+    private bool freed;
     #endregion
 
     // Start is called before the first frame update
@@ -47,6 +48,10 @@ public class GhostController : MonoBehaviour
             myRoom.GetComponent<ShardHandler>().delete5_5();
         } else if ((myColumn == 5) && (myRow == 1)) {
             myRoom.GetComponent<ShardHandler>().delete5_1();
+        } else if ((myColumn == 1) && (myRow == 3)) {
+            if (myRoom.GetComponent<ShardHandler>().getShardsCollected() == 3) {
+                myRoom.GetComponent<MapHandler>().fixMirror();
+            }
         }
         if (Input.GetKeyDown(KeyCode.L)) {
             Debug.Log("Col " + myColumn);
@@ -66,7 +71,7 @@ public class GhostController : MonoBehaviour
                 myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow).GetComponent<SpriteRenderer>().color = new Color(colorR + 100, colorG + 100, colorB);
         }   
         } else {
-            if (canPossessTile()) {
+            if (!freed && canPossessTile()) {
                 if(Input.GetKeyDown(KeyCode.J)) {
                     Debug.Log("Possessing");
                     isPossessing = true;
@@ -78,6 +83,15 @@ public class GhostController : MonoBehaviour
                     colorG = myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow).GetComponent<SpriteRenderer>().color.g;
                     colorB = myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow).GetComponent<SpriteRenderer>().color.b;
                     myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow).GetComponent<SpriteRenderer>().color = new Color(colorR - 100, colorG - 100, colorB);
+                    if ((myColumn == 1) && (myRow == 3)) {
+                        this.transform.position = myRoom.GetComponent<MapHandler>().GetTileCenter(-1, 3);
+                        isPossessing = false;
+                        colorR = this.GetComponent<SpriteRenderer>().color.r;
+                        colorG = this.GetComponent<SpriteRenderer>().color.g;
+                        colorB = this.GetComponent<SpriteRenderer>().color.b;
+                        this.GetComponent<SpriteRenderer>().color = new Color(colorR, colorG, colorB, 0.5f);
+                        GameObject.Find("Main Camera").transform.position = new Vector3 (-10, 0, -10);
+                    }
                 }
             } else if ((myColumn == 3) && (myRow == 5)) {
                 if (myRoom.GetComponent<MapHandler>().GetTileObject(myColumn, myRow) == null) {
@@ -111,6 +125,8 @@ public class GhostController : MonoBehaviour
                     }
                 } else if ((myRoom.GetComponent<MapHandler>().GetTileObject(myColumn + 1, myRow) != null) && (myRoom.GetComponent<MapHandler>().GetTileObject(myColumn + 1, myRow).CompareTag("Impassable"))) {
                     Debug.Log("GHOST CANT STAND THERE");
+                } else if ((myColumn + 1) == 0) {
+                    Debug.Log("OUT OF BOUNDS");
                 } else {
                     myColumn += 1;
                     this.transform.position = myRoom.GetComponent<MapHandler>().GetTileCenter(myColumn, myRow);
@@ -128,6 +144,8 @@ public class GhostController : MonoBehaviour
                     }
                 } else if ((myRoom.GetComponent<MapHandler>().GetTileObject(myColumn - 1, myRow) != null) && (myRoom.GetComponent<MapHandler>().GetTileObject(myColumn - 1, myRow).CompareTag("Impassable"))) {
                     Debug.Log("GHOST CANT STAND THERE");
+                } else if ((myColumn - 1) < -5) {
+                    Debug.Log("OUT OF BOUNDS");
                 } else {
                     myColumn -= 1;
                     this.transform.position = myRoom.GetComponent<MapHandler>().GetTileCenter(myColumn, myRow);

@@ -40,6 +40,9 @@ public class MapHandler : MonoBehaviour
     private int resetObjects;
     #endregion
 
+    [SerializeField]
+    [Tooltip("Put the fixed Mirror Sprite here")]
+    private Sprite fixedMirror;
     void Awake() 
     {
         //tileOccupancy = new GameObject[roomSize,roomSize];
@@ -188,5 +191,10 @@ public class MapHandler : MonoBehaviour
     }
     public int getResetObjects() {
         return resetObjects;
+    }
+
+    public void fixMirror() {
+        roomStarterObjects[5].GetComponent<SpriteRenderer>().sprite = fixedMirror;
+        roomStarterObjects[5].tag = "Possessable";
     }
 }
