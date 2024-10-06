@@ -64,4 +64,11 @@ public class ObjectReset : MonoBehaviour
             wall.GetComponent<WallReactor>().resetReset(); 
         }   
     }
+
+    public int getColumn() {
+        return currentColumn;
+    }
+    public int getRow() {
+        return currentRow;
+    }
 }
